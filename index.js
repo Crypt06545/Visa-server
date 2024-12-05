@@ -31,18 +31,29 @@ async function run() {
     const usersCollection = database.collection("NewVisa");
 
     // get
+
+    //hello 
     app.get("/", (req, res) => {
       res.send("hello");
     });
-
+    
+   // allvisas 
     app.get("/allvisas", async (req, res) => {
       const allVisa = usersCollection.find();
       const result = await allVisa.toArray();
       res.json(result);
     });
 
-    // app.get()
+    // visaDetails 
+    app.get("/visadetails/:id", async (req, res) => {
+      const id = req.params.id;
+      const visaDetails = await usersCollection.findOne({ _id: new ObjectId(id) });
+      res.json(visaDetails);
+    });
+  
     // post
+
+    // addvisa 
     app.post("/addvisa", async (req, res) => {
       const newVisa = req.body;
       // console.log(newVisa);
