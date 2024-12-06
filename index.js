@@ -63,27 +63,15 @@ async function run() {
       res.json(visaDetails);
     });
 
-    // myaddedvisa
-    // app.get('/myaddedvisa/:email', async(req,res)=>{
-    //   const email = re
-    // })
-    
-    // // my created visas
-    // app.get("/createdvisa/:email", async (req, res) => {
-    //   const email = req.params.email;
-    //   const result = await applyVisaCollection.find({ email }).toArray();
-    //   res.json(result);
-    // });
-    
     // my added visas
     app.get("/myvisas/:email", async (req, res) => {
       const email = req.params.email;
       const result = await applyVisaCollection.find({ email }).toArray();
       res.json(result);
     });
-    
-    
+
     //post requests
+
     //applyvisa
     app.post("/applyvisa", async (req, res) => {
       const applyVisa = req.body;
@@ -91,7 +79,7 @@ async function run() {
       const result = await applyVisaCollection.insertOne(applyVisa);
       res.send(result);
     });
-    
+
     //addvisa
     app.post("/addvisa", async (req, res) => {
       const newVisa = req.body;
@@ -100,10 +88,14 @@ async function run() {
       res.send(result);
     });
 
-    // //delete requests
-    // app.delete('/rmyapplication/:id', async(req,res)=>{
-    //   const removeMyApplication = req.
-    // })
+    // delete requests
+    app.delete("/rmyapplication/:id", async (req, res) => {
+      const id = req.params.id;
+      // console.log(id);
+      const query = { _id: new ObjectId(id) };
+      const result = await applyVisaCollection.deleteOne(query);
+      res.send(result);
+    });
 
     await client.db("admin").command({ ping: 1 });
     console.log(
