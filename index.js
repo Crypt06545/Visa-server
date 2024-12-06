@@ -40,21 +40,18 @@ async function run() {
       res.send("hello");
     });
 
-    //allvisas
     app.get("/allvisas", async (req, res) => {
       const allVisa = usersCollection.find();
       const result = await allVisa.toArray();
       res.json(result);
     });
 
-    //latest visas
     app.get("/latestvisas", async (req, res) => {
       const latestvisas = usersCollection.find().limit(6);
       const result = await latestvisas.toArray();
       res.json(result);
     });
 
-    //visaDetails
     app.get("/visadetails/:id", async (req, res) => {
       const id = req.params.id;
       const visaDetails = await usersCollection.findOne({
@@ -63,14 +60,12 @@ async function run() {
       res.json(visaDetails);
     });
 
-    // my apply visas
     app.get("/myvisas/:email", async (req, res) => {
       const email = req.params.email;
       const result = await applyVisaCollection.find({ email }).toArray();
       res.json(result);
     });
 
-    // my addedvisas visas
     app.get("/addedvisas/:email", async (req, res) => {
       const email = req.params.email;
       const result = await usersCollection.find({ email }).toArray();
@@ -78,8 +73,6 @@ async function run() {
     });
 
     //post requests
-
-    //applyvisa
     app.post("/applyvisa", async (req, res) => {
       const applyVisa = req.body;
       // console.log(applyVisa);
@@ -87,7 +80,6 @@ async function run() {
       res.send(result);
     });
 
-    //addvisa
     app.post("/addvisa", async (req, res) => {
       const newVisa = req.body;
       // console.log(newVisa);
@@ -102,6 +94,37 @@ async function run() {
       // console.log(id);
       const query = { _id: new ObjectId(id) };
       const result = await applyVisaCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    app.delete("/addedvisadelete/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await usersCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    // update method
+    app.patch("/updatevisa/:id", async (req, res) => {
+      const id = req.params.id;
+      // console.log(id);
+
+      const data = req.body;
+      const query = { _id: new ObjectId(id) };
+      const update = {
+        $set: {
+          countryImage: data?.countryImage,
+          countryName: data?.countryName,
+          visaType: data?.visaType,
+          processingTime: data?.processingTime,
+          description: data?.description,
+          ageRestriction: data?.ageRestriction,
+          fee: data?.fee,
+          validity: data?.validity,
+          applicationMethod: data?.applicationMethod,
+        },
+      };
+      const result = await usersCollection.updateOne(query, update);
       res.send(result);
     });
 
