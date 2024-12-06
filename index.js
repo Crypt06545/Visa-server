@@ -63,10 +63,17 @@ async function run() {
       res.json(visaDetails);
     });
 
-    // my added visas
+    // my apply visas
     app.get("/myvisas/:email", async (req, res) => {
       const email = req.params.email;
       const result = await applyVisaCollection.find({ email }).toArray();
+      res.json(result);
+    });
+
+    // my addedvisas visas
+    app.get("/addedvisas/:email", async (req, res) => {
+      const email = req.params.email;
+      const result = await usersCollection.find({ email }).toArray();
       res.json(result);
     });
 
@@ -89,6 +96,7 @@ async function run() {
     });
 
     // delete requests
+
     app.delete("/rmyapplication/:id", async (req, res) => {
       const id = req.params.id;
       // console.log(id);
